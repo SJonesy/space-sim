@@ -2,33 +2,29 @@ cmake_minimum_required(VERSION 3.25)
 project(space-sim)
 
 ############################################################
-# Create a library
+# Enable clang-tidy
 ############################################################
-# Source files to be used in the library
-set(library_SOURCES
-    src/flecs.c
+find_program(CLANG_TIDY_EXE NAMES "clang-tidy" "clang-tidy-7" "clang-tidy-8" "clang-tidy-9")
+
+if(CLANG_TIDY_EXE)
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
+endif()
+
+add_custom_target(
+    clang-tidy
+    COMMAND ${CLANG_TIDY_EXE} --checks='-*,clang-diagnostic-*,-clang-diagnostic-unused-value,clang-analyzer-*,-*,bugprone-*,performance-*,readability-*,-readability-magic-numbers,-readability-braces-around-statements,-readability-inconsistent-declaration-parameter-name,-readability-named-parameter' ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    #    DEPENDS space-sim
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Running clang-tidy on your code..."
+    VERBATIM
 )
 
-#Generate the static library from the library sources
-add_library(flecs STATIC ${library_SOURCES})
-
-target_include_directories(flecs
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
-)
-
 ############################################################
-# Create an executable
+# Create space-sim executable
 ############################################################
-# Source fles for the binary
-set(binary_SOURCES
+set(binary_SOURCES 
     src/main.cpp
 )
 
-# Add an executable with the above sources
 add_executable(space-sim ${binary_SOURCES})
-
-# link the new hello_library target with the hello_binary target
-target_link_libraries( space-sim
-    PRIVATE flecs
-)
 
