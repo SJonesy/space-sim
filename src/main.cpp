@@ -1,29 +1,25 @@
+#include <cstdio>
 #include "EntityManager.h"
-
-struct Position
-{
-  int x;
-  int y;
-};
-
-struct Components
-{
-  Position* position;
-  bool* is_destroyed;
-};
+#include "Components.h"
 
 int main(int argc, char *argv[]) 
 {
+  // TODO launch options
+
   EntityManager entity_manager;
 
   Components components;
-  components.position = new Position[MAX_ENTITIES]();
-  components.is_destroyed = new bool[MAX_ENTITIES]();
 
-  uint16 entity_id = entity_manager.CreateEntity();
-  components.position[entity_id] = Position{0,0};
-  components.is_destroyed[entity_id] = false;
-
+  // testing entity creation
+  for (int j= 0; j<= 3; j++)
+  {
+  for (int i = 0; i<=60000; i++)
+  {
+    uint16 entity_id = entity_manager.CreateEntity();
+    components.position[entity_id] = Position{0,0};
+    components.is_destroyed[entity_id] = false;
+  }
+  
   // "system"
   for (int i=0; i<=entity_manager.HighestID(); i++)
   {
@@ -31,10 +27,14 @@ int main(int argc, char *argv[])
     components.position[i].y++;
   }
 
-  components.is_destroyed[entity_id] = true;
-  entity_manager.DestroyEntity(entity_id);
+  for (int i=0; i<=entity_manager.HighestID(); i+=2)
+  {
+    components.is_destroyed[i] = true;
+    entity_manager.DestroyEntity(i);
+  }
+  }
 
-  delete[] components.position;
-  delete[] components.is_destroyed;
+  printf("highest entity_id: %d", entity_manager.HighestID());
+
   return 0;
 }

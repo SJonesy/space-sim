@@ -1,5 +1,8 @@
 #include "EntityManager.h"
 
+#include <cstdio>
+#include <cassert>
+
 EntityManager::EntityManager()
 {
   entities = new uint16[MAX_ENTITIES];
@@ -25,6 +28,7 @@ int EntityManager::CreateEntity()
     highest_id = *next_id;
   }
 
+  assert(*next_id < MAX_ENTITIES);
   next_id++;
   return id_to_return;
 }
