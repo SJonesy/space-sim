@@ -36,3 +36,4 @@ set_target_properties(space-sim PROPERTIES COMPILE_FLAGS "-save-temps")
 target_include_directories(space-sim SYSTEM PRIVATE "third-party/flecs/")
 target_link_libraries(space-sim flecs)
 add_dependencies(space-sim flecs)
+
