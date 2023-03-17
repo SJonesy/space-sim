@@ -26,4 +26,5 @@ endif()
 # Create space-sim executable target
 ############################################################
 add_executable(space-sim ${binary_SOURCES})
-
+set_target_properties(space-sim PROPERTIES COMPILE_FLAGS "-save-temps")
+target_include_directories(space-sim SYSTEM "third-party/flecs/*.cpp")

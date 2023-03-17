@@ -1,14 +1,13 @@
 #include <cstdio>
 #include "EntityManager.h"
 #include "Components.h"
+#include "Simulation.h"
 
 int main(int argc, char *argv[]) 
 {
   // TODO launch options
 
-  EntityManager entity_manager;
-
-  Components components;
+  Simulation simulation;
 
   // testing entity creation
   for (int j= 0; j<= 3; j++)
