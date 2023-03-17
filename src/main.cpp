@@ -1,39 +1,29 @@
-#include <cstdio>
-#include "EntityManager.h"
-#include "Components.h"
-#include "Simulation.h"
+#include <flecs.h>
 
-int main(int argc, char *argv[]) 
-{
-  // TODO launch options
+struct Position {
+  float x, y;
+};
 
-  Simulation simulation;
+int main(int argc, char *argv[]) {
+  flecs::world ecs;
 
-  // testing entity creation
-  for (int j= 0; j<= 3; j++)
+  ecs.system<Position>()
+    .each([](Position& pos) {
+      pos.x += 0;
+      pos.y += 0;
+    });
+
+  auto e = ecs.entity()
+    .set([](Position& pos) {
+      pos = {10, 20};
+    });
+
+  while (true)
   {
-  for (int i = 0; i<=60000; i++)
-  {
-    uint16 entity_id = entity_manager.CreateEntity();
-    components.position[entity_id] = Position{0,0};
-    components.is_destroyed[entity_id] = false;
+    if (!ecs.progress()) {
+      return 1;
+    }
   }
-  
-  // "system"
-  for (int i=0; i<=entity_manager.HighestID(); i++)
-  {
-    components.position[i].x++;
-    components.position[i].y++;
-  }
-
-  for (int i=0; i<=entity_manager.HighestID(); i+=2)
-  {
-    components.is_destroyed[i] = true;
-    entity_manager.DestroyEntity(i);
-  }
-  }
-
-  printf("highest entity_id: %d", entity_manager.HighestID());
 
   return 0;
 }
