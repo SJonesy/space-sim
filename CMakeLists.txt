@@ -21,10 +21,18 @@ else()
     message(FATAL_ERROR "clang-tidy executable not found. Please install clang-tidy and make sure it is in your PATH.")
 endif()
 
+############################################################
+# Create flecs target
+############################################################
+file(GLOB_RECURSE flecs_SOURCES third-party/flecs/*)
+add_library(flecs ${flecs_SOURCES})
+target_include_directories(flecs SYSTEM PRIVATE "third-party/flecs/")
 
 ############################################################
 # Create space-sim executable target
 ############################################################
 add_executable(space-sim ${binary_SOURCES})
 set_target_properties(space-sim PROPERTIES COMPILE_FLAGS "-save-temps")
-target_include_directories(space-sim SYSTEM "third-party/flecs/*.cpp")
+target_include_directories(space-sim SYSTEM PRIVATE "third-party/flecs/")
+target_link_libraries(space-sim flecs)
+add_dependencies(space-sim flecs)
